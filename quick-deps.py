@@ -1,5 +1,17 @@
 import xml.etree.ElementTree as ET
 import os
+import argparse
+
+# ... (scan_proxy_bundle, process_policy functions remain the same) ... 
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Apigee Proxy Dependency Scanner")
+    parser.add_argument(
+        "-f", "--folder", help="Path to the root folder containing proxy bundles"
+    )
+    args = parser.parse_args()
+
+    root_folder = args.folder or "./"  # Default if not provided
 
 def scan_proxy_bundle(proxy_path):
     dependencies = {
@@ -30,7 +42,6 @@ def process_policy(policy_file, dependencies):
     # ... (add logic to find proxy references, target endpoint references) ...
 
 # Main Scan Logic
-root_folder = "/path/to/proxy/bundles"
 all_dependencies = {}
 
 for bundle_folder in os.listdir(root_folder):
