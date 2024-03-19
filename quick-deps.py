@@ -38,8 +38,22 @@ def process_policy(policy_file, dependencies):
     for kvm_ref in root.findall('.//AssignTo[@variableName]'): 
         if kvm_ref.get('variableName').startswith('kvm.'):
             dependencies["kvms"].append(kvm_ref.get('variableName'))
+      
+        # Shared Flow References
+    for flowcallout in root.findall('.//FlowCallout'): 
+        sharedflow_name = flowcallout.find('SharedFlowBundle').text
+        dependencies["sharedflows"].append(sharedflow_name)
 
-    # ... (add logic to find proxy references, target endpoint references) ...
+    # Target Server References
+    for service_callout in root.findall('.//ServiceCallout'): 
+        targetserver_name = service_callout.get('request') 
+        # (Handle cases where target server might be a variable)
+        dependencies["targetservers"].append(targetserver_name)
+
+    # References
+    for reference_el in root.findall('.//Reference'):
+        ref_name = reference_el.get('ref')
+        dependencies['references'].append(ref_name)
 
 # Main Scan Logic
 all_dependencies = {}
